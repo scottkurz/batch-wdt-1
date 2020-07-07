@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/jobXML_1_0.xsd" id="PartitionInjectionTest" restartable="true" version="1.0">
+	<step id="Step1" next="Step2">
+		<batchlet ref="com.ibm.sample.LoggingPartitionedBatchlet">
+			<properties >
+				<property name="partitionNumber" value="#{partitionPlan['partitionNumber']}"/>
+			</properties>
+		</batchlet>
+		<partition>
+			<plan partitions="2" threads="2">
+				<properties partition="0">
+					<property name="partitionNumber" value="0"/>
+				</properties>
+				<properties partition="1">
+					<property name="partitionNumber" value="1"/>
+				</properties>
+			</plan>
+		</partition>
+	</step>
+	<step id="Step2">
+		<batchlet ref="com.ibm.sample.LoggingPartitionedBatchlet">
+			<properties >
+				<property name="partitionNumber" value="#{partitionPlan['partitionNumber']}"/>
+			</properties>
+		</batchlet>
+	</step>
+</job>
